@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ganesh -Portfolio</title>
+<link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="bootstrap-5.0.2-dist/js/bootstrap.js">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --bg: #0b0f14; --card: #0f1720; --muted: #98a0a6; --accent: #3fa9f5; --glass: rgba(255,255,255,0.04);
+      --neon: 0 0 18px rgba(63,169,245,0.18), 0 0 40px rgba(63,169,245,0.08);
+    }
+
+    [data-theme="light"]{ --bg:#f5f7fb; --card:#fff; --muted:#556; --accent:#0066cc; --glass: rgba(0,0,0,0.04); }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;padding:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--muted); -webkit-font-smoothing:antialiased;
+      transition:background.35s ease, color .35s ease;
+    }
+
+    /* Loading Screen */
+    #loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9999;transition:opacity .4s}
+    .loader-inner{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;box-shadow:var(--neon);animation:spin 1.6s linear infinite}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    /* Navbar */
+    header.nav{position:fixed;top:0;left:0;right:0;background:linear-gradient(180deg, rgba(0,0,0,0.35), transparent);backdrop-filter:blur(6px);z-index:1000;}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+    .logo{font-weight:700;color:var(--accent);letter-spacing:0.4px}
+    nav a{color:var(--muted);text-decoration:none;margin:0 10px;font-weight:500}
+    nav a:hover{color:#fff}
+    .nav-actions{display:flex;gap:8px;align-items:center}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .btn:hover{transform:translateY(-3px)}
+
+    /* Hero */
+    .hero{min-height:50vh;display:flex;align-items:center;padding:70px 50px 20px 50px;position:relative;overflow:hidden}
+    .hero-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:center}
+    .hero-left h1{font-size:2.6rem;color:#fff;margin-bottom:8px}
+    .typing{color:var(--accent);font-weight:700}
+    .me-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), transparent); margin:auto;text-align: center;}
+    .me-card img{width:130%;border-radius:50%; display:block;object-fit: cover;height: 40vh;}
+
+    /* Sections */
+    section{max-width:1100px;margin:40px auto;padding:30px 20px}
+    h2{color:#fff;margin-bottom:14px;font-size:1.6rem}
+    p.lead{color:var(--muted);line-height:1.6}
+
+    /* Skills cards */
+    .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px}
+    .skill{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--neon);text-align:center;color:#fff;transform:perspective(800px) rotateX(0deg);transition:transform .35s}
+    .skill:hover{transform:perspective(800px) rotateX(6deg) translateY(-6px)}
+
+    
+    /* Project Grid */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* Project Card */
+.project-card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--neon);
+  transform: translateY(0) scale(1);
+  transition: transform .35s ease, box-shadow .35s ease;
+  animation: floatCard 6s ease-in-out infinite;
+}
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+.project-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 0 22px rgba(63,169,245,0.3);
+}
+
+/* Project Image */
+.project-img {
+  overflow: hidden;
+  height: 180px;
+}
+.project-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.project-card:hover .project-img img {
+  transform: scale(1.15);
+}
+
+/* Content */
+.project-content {
+  padding: 16px 20px;
+  color: #fff;
+}
+.project-content h3 {
+  margin: 6px 0;
+  font-size: 1.2rem;
+}
+.project-content p {
+  margin: 0;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Tech Badges */
+.badges span {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  margin-right: 6px;
+  font-size: 0.78rem;
+  color: var(--accent);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Buttons */
+.btn-small {
+  display: inline-block;
+  background: var(--accent);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  margin-right: 8px;
+  box-shadow: var(--neon);
+  transition: transform .25s ease;
+}
+.btn-small:hover {
+  transform: translateY(-3px);
+}
+
+
+    /* Contact & Footer */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+    /* Floating Top Button */
+    .top-btn{position:fixed;right:20px;bottom:20px;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;background:var(--accent);color:#fff;border:none;cursor:pointer;box-shadow:var(--neon);}
+
+    /* Particles canvas */
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    /* Responsive */
+    @media(max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .me-card{order:-1}
+      .contact-grid{grid-template-columns:1fr}
+      nav{display:none}
+    }
+
+    /* Glow / Neon headings */
+    .neon{color:#fff;text-shadow:0 0 10px rgba(63,169,245,0.12),0 0 30px rgba(139,92,246,0.06)}
+
+    /* Tiny polish */
+    a.link{color:var(--accent);text-decoration:none}
+
+    /* Typing caret */
+    .typing .cursor{display:inline-block;width:2px;height:1.2em;background:var(--accent);margin-left:6px;vertical-align:middle;animation:blink 1s steps(2) infinite}
+    @keyframes blink{50%{opacity:0}}
+  
+
+/* Timeline Styles */
+.timeline{position:relative;margin-left:20px;padding-left:30px;border-left:3px solid rgba(63,169,245,0.35);}
+.timeline::before{content:'';position:absolute;left:-2px;top:0;bottom:0;width:3px;background:linear-gradient(#3fa9f5,transparent,#3fa9f5);filter:blur(2px);animation:glowLine 4s linear infinite;}
+@keyframes glowLine{0%{opacity:0.3}50%{opacity:1}100%{opacity:0.3}}
+.timeline-item{position:relative;margin:30px 0;}
+.timeline-dot{position:absolute;left:-39px;top:0;width:16px;height:16px;border-radius:50%;box-shadow:0 0 10px rgba(255,255,255,0.4);}
+.timeline-content{background:var(--card);padding:16px 20px;border-radius:12px;color:#fff;box-shadow:var(--neon);opacity:0;transform:translateY(40px);transition:all .6s ease;}
+.timeline-content.show{opacity:1;transform:translateY(0);} 
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <div class="logo">Ganesh Folio</div>
+    <nav role="navigation">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-primary" id="resumeBtn">Github</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-grid" style="z-index:1;">
+    <div class="hero-left" data-aos="fade-right">
+      <h1 class="neon">Hi, I'm <span class="typing" id="typeTarget">Lanka Ganesh<span class="cursor"></span></span></h1>
+      <p class="lead" style="margin-top:12px;color:var(--muted)">Aspiring software developer — I build responsive web apps, automation scripts and simple APIs. I love clean UI and efficient code.</p>
+      <div style="margin-top:18px;display:flex;gap:10px">
+        <a class="btn" href="#projects">See Projects</a>
+        <a class="btn" href="#contact">Education</a>
+      </div>
+    </div>
+
+    <aside class="me-card" data-aos="fade-left">
+      <img src="images/IMG-20240410-WA0176.jpg" alt="profile" />
+    </aside>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" data-aos="fade-up">
+  <h2>About Me</h2>
+  <p class="lead">I'm a recent grad who enjoys turning ideas into real products. Skilled in frontend, basic backend and database fundamentals. Always learning.</p>
+</section>
+
+<!-- SKILLS -->
+<section  id="skills" data-aos="fade-up">
+  <h2>Skills</h2>
+  <div class="skills ">
+     <div class="skill">C Programming </div>
+    <div class="skill">HTML & CSS</div>
+     <div class="skill">Bootstrap</div>
+    <div class="skill">JavaScript</div>
+    <div class="skill"> GitHub</div>
+     <div class="skill">Canva</div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" data-aos="fade-up">
+  <h2>Projects</h2>
+
+  <div class="project-grid">
+
+    <!-- CARD 1 -->
+    <div class="project-card" data-aos="zoom-in">
+      <div class="project-img">
+        <img src="images/IMG_20251106_105026.jpg" />
+      </div>
+      <div class="project-content">
+        <h3>Portfolio Website</h3>
+        <p>A modern portfolio with animations, theme toggle and responsive layout.</p>
+
+        <div class="badges">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span>
+        </div>
+
+        <div class="project-links mt-2">
+          <a href="#" class="btn-small">Live</a>
+          <a href="#" class="btn-small">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="project-card" data-aos="zoom-in" data-aos-delay="150">
+      <div class="project-img">
+        <img src="images/Computer Programing, Coding, Web Development with Isometric Laptop Displaying Futuristic UI.jpeg" />
+      </div>
+      <div class="project-content">
+        <h3>Student Management System</h3>
+        <p>CRUD application with login, dashboard, database integration.</p>
+
+        <div class="badges">
+          <span>Python</span><span>MySQL</span>
+        </div>
+
+        <div class="project-links mt-2">
+          <a href="#" class="btn-small">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="project-card" data-aos="zoom-in" data-aos-delay="300">
+      <div class="project-img">
+        <img src="images/High-Converting Sites That Look Amazing.jpeg" />
+      </div>
+      <div class="project-content">
+        <h3>Weather App</h3>
+        <p>Minimal weather UI fetching real-time data from OpenWeather API.</p>
+
+        <div class="badges">
+          <span>JavaScript</span><span>API</span>
+        </div>
+
+        <div class="project-links mt-2">
+          <a href="#" class="btn-small">Live</a>
+          <a href="#" class="btn-small">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>I 
+
+<button class="top-btn" id="topBtn" title="Back to top">↑</button>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+
+// Timeline Scroll Animation
+document.addEventListener('DOMContentLoaded', ()=>{
+  const tItems = document.querySelectorAll('.timeline-content');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.3 });
+  tItems.forEach(i => observer.observe(i));
+});
+
+</script>
+<script>
+  // AOS init
+  AOS.init({duration:900,easing:'ease-out-back',once:true});
+
+  // Loading screen
+  window.addEventListener('load',()=>{
+    const l = document.getElementById('loader');
+    l.style.opacity='0';
+    setTimeout(()=>l.style.display='none',450);
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+  function setTheme(t){ body.setAttribute('data-theme', t); themeToggle.setAttribute('aria-pressed', t==='light'); }
+  // default from storage
+  const saved = localStorage.getItem('theme')||'dark'; setTheme(saved);
+  themeToggle.addEventListener('click', ()=>{ const next = body.getAttribute('data-theme')==='dark'?'light':'dark'; setTheme(next); localStorage.setItem('theme', next); });
+
+  // Typing animation (simple rotate words)
+  const words = ['Lanka Ganesh', 'Developer', 'Designer', 'Problem Solver'];
+  const target = document.getElementById('typeTarget');
+  let wi=0, ci=0, adding=true;
+  function tick(){
+    const w = words[wi];
+    if(adding){ target.childNodes[0].nodeValue = w.slice(0, ci+1) + ' ';
+      ci++;
+      if(ci===w.length){ adding=false; setTimeout(tick,900); return }
+    } else {
+      target.childNodes[0].nodeValue = w.slice(0, ci-1) + ' ';
+      ci--;
+      if(ci===0){ adding=true; wi=(wi+1)%words.length }
+    }
+    setTimeout(tick, adding?120:60);
+  }
+  // Ensure text node exists
+  if(!target.childNodes[0]) target.insertBefore(document.createTextNode(''), target.firstChild);
+  setTimeout(tick, 800);
+
+  // Top button
+  const topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', ()=>{ if(window.scrollY>300) topBtn.style.display='grid'; else topBtn.style.display='none'; });
+  topBtn.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // Slider
+  const slides = document.getElementById('slides');
+  const total = slides.children.length; let index=0;
+  function updateSlider(){ slides.style.transform = `translateX(-${index*100}%)`; }
+  document.getElementById('next').addEventListener('click', ()=>{ index=(index+1)%total; updateSlider(); });
+  document.getElementById('prev').addEventListener('click', ()=>{ index=(index-1+total)%total; updateSlider(); });
+  // auto play
+  setInterval(()=>{ index=(index+1)%total; updateSlider(); },7000);
+
+  // Simple particle system (canvas)
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w=canvas.width=innerWidth, h=canvas.height=innerHeight, parts=[];
+  function rand(min,max){return Math.random()*(max-min)+min}
+  function initParticles(){ parts=[]; for(let i=0;i<80;i++){ parts.push({x:Math.random()*w, y:Math.random()*h, r:rand(0.6,2.5), vx:rand(-0.25,0.25), vy:rand(-0.25,0.25), alpha:rand(0.05,0.35)}) }}
+  function resize(){ w=canvas.width=innerWidth; h=canvas.height=innerHeight; initParticles(); }
+  window.addEventListener('resize', resize);
+  initParticles();
+  function loop(){ ctx.clearRect(0,0,w,h); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0; ctx.beginPath(); ctx.fillStyle=`rgba(63,169,245,${p.alpha})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
+    // connect
+    for(let i=0;i<parts.length;i++){ for(let j=i+1;j<parts.length;j++){ const a=parts[i], b=parts[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=dx*dx+dy*dy; if(d<9000){ const alpha=(9000-d)/9000*0.08; ctx.strokeStyle=`rgba(63,169,245,${alpha})`; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click', (e)=>{ e.preventDefault(); const id = a.getAttribute('href'); document.querySelector(id).scrollIntoView({behavior:'smooth'}); }));
+
+  // small accessibility: focus outlines
+  document.addEventListener('keydown', e=>{ if(e.key==='Tab') document.body.style.outline='none'; });
+</script>
+    <!-- Education -->
+    <section id="education" class="timeline-section">
+        <h2>Education</h2>
+
+        <!-- Glowing vertical line -->
+        <div class="timeline" id="education">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:#ff6b6b"></div>
+                <div class="timeline-content slide-in">
+                    <h3>🎓 Degree</h3>
+                    <p>Government Degree Collage 2020 – 2023</p>
+                    <p>CGPA 7.29</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:#6b9bff"></div>
+                <div class="timeline-content slide-in">
+                    <h3>🏫 Intermediate</h3>
+                    <p>Government Junior Collage 2017 - 2019</p>
+                    <p>CGPA 7.0</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:#6bff95"></div>
+                <div class="timeline-content slide-in">
+                    <h3>📘 10th</h3>
+                    <p>Z.P.H School - 2017</p>
+                    <p>CGPA 8.0</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Timeline -->
+    <section id="certificates" class="timeline-section">
+        <h2>Certificates</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:#ffa500"></div>
+                <div class="timeline-content slide-in">
+                    <h3>💻 Python Programming Certificate</h3>
+                    <P>Machine Learning</P>
+                    <p>Udemy — 2024</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:#ff00aa"></div>
+                <div class="timeline-content slide-in">
+                    <h3>🌐 Front End Development Course</h3>
+                    <p>Html- css - Bootstrap -JavaScript</p>
+                    <p>Coursera — 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- CONTACT moved to bottom -->
+<section id="contact" data-aos="fade-up">
+  <h2>Contact</h2>
+  <div class="contact-grid">
+    <div>
+      <p class="lead">Email : <a class="link" href="mailto:yourmail@gmail.com">ganeshlanka00@gmail.com</a></p>
+      <p class="lead">LinkedIn : <a class="link" href="#">linkedin.com/in/LankaGanesh</a></p>
+    </div>
+    <div>
+      <p class="lead">Github :<a class="link" href="#">ganeshlanka.github.io</a></p>
+      <p class="lead">Phone : +91 9391001856</p>
+    </div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+// Timeline Scroll Animation (FIXED PROPER SCRIPT BLOCK)
+document.addEventListener('DOMContentLoaded', ()=>{
+  const tItems = document.querySelectorAll('.timeline-content');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  tItems.forEach(i => observer.observe(i));
+});
+</script>
+  
+</body>
+</html>
